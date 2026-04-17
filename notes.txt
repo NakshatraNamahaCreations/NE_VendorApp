@@ -1,0 +1,23 @@
+1. Add a keywords property,
+2. Add a description in list wise,
+3. change category dropdown in add product component
+4. Snackbar react native paper, chip
+
+android/app/build/outputs/apk/debug/app-debug.apk
+
+------------------------------
+not cleared.. fix later.
+-------------------------------
+1. image is not being updating when selecting from relevant products >>> product detailed.
+2. products is showing in vendor app itself >>> home
+
+server link: https://eventbox.nakshatranamahacreations.in/
+
+order_status: 
+    Order Placed, 
+    Order Deliverd, 
+    Order Cancelled,
+    Order Returned  // exception
+
+    google map api
+    AIzaSyBv8pwRYDC8uGhJyOHghEemPrvccKl2WaA

@@ -1,0 +1,600 @@
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Octicons from 'react-native-vector-icons/Octicons';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import {apiUrl} from '../../api-services/api-constants';
+import axios from 'axios';
+import THEMECOLOR from '../../utilities/color';
+
+export default function Profile({vendorData}) {
+  // console.log('vendorData in profile page', vendorData);
+  const navigation = useNavigation();
+  const [profileData, setProfileData] = useState({});
+  const removeItemValue = async () => {
+    try {
+      await AsyncStorage.clear();
+      console.log('User removed from AsyncStorage');
+      Alert.alert('Logout successful');
+      navigation.navigate('Login');
+    } catch (exception) {
+      console.error('Failed to remove the user from AsyncStorage', exception);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${apiUrl.BASEURL}${apiUrl.GET_PROFILE}`);
+      if (res.status === 200) {
+        const profile = res.data.profile;
+        setProfileData(profile);
+      }
+    } catch (error) {
+      console.error('Failed to fetch teams:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <View style={{paddingVertical: 25, paddingHorizontal: 10}}>
+      <ScrollView>
+        <View>
+          <Text
+            style={{
+              fontSize: 18,
+              color: 'black',
+              // letterSpacing: 1,
+              fontFamily: 'Montserrat-Medium',
+            }}>
+            {vendorData.vendor_name}
+          </Text>
+          <View style={{flexDirection: 'row', marginTop: 5}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: 'black',
+                // letterSpacing: 1,
+                fontFamily: 'Montserrat-Regular',
+              }}>
+              +91-{vendorData.mobile_number}
+            </Text>
+            <Entypo name="dot-single" size={20} color="black" />
+            <Text
+              style={{
+                fontSize: 13,
+                color: 'black',
+                fontFamily: 'Montserrat-Regular',
+              }}>
+              {vendorData.email}
+            </Text>
+          </View>
+          <Text
+            style={{
+              fontSize: 13,
+              color: THEMECOLOR.mainColor,
+              fontFamily: 'Montserrat-SemiBold',
+            }}>
+            {vendorData.profession}
+          </Text>
+          {/* <TouchableOpacity style={{marginTop: 5}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: '#C026D3',
+                // letterSpacing: 1,
+                fontFamily: 'Montserrat-Medium',
+              }}>
+              Edit Profile{' '}
+              <Entypo name="chevron-thin-right" size={12} color="#C026D3" />
+            </Text>
+          </TouchableOpacity> */}
+        </View>
+        {/* <View
+          style={{
+            borderBottomColor: '#5d5d5d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        <TouchableOpacity
+          style={{marginVertical: 2}}
+          onPress={() =>
+            navigation.navigate('My Address', {
+              vendorId: vendorData._id,
+            })
+          }>
+          <Text style={styles.profileLable}>
+            <MaterialIcons name="location-pin" size={14} color="#C026D3" />{' '}
+            Address
+          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: 'black',
+                // letterSpacing: 1,
+                fontFamily: 'Montserrat-Light',
+              }}>
+              Edit & Add new addresses
+            </Text>
+            <Entypo name="chevron-thin-right" size={15} color="black" />
+          </View>
+        </TouchableOpacity> */}
+        {/* {vendorData?.profession &&
+          vendorData?.profession !== 'Vendor & Seller' && (
+            <>
+              <View
+                style={{
+                  borderBottomColor: '#5d5d5d',
+                  borderBottomWidth: 1,
+                  marginVertical: 15,
+                }}></View>
+              <TouchableOpacity
+                style={{marginVertical: 2}}
+                onPress={() =>
+                  navigation.navigate('My Address', {
+                    vendorId: vendorData._id,
+                  })
+                }>
+                <Text style={styles.profileLable}>
+                  <MaterialIcons
+                    name="shopping-cart"
+                    size={14}
+                    color="#C026D3"
+                  />{' '}
+                  Orders
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: 'black',
+                      // letterSpacing: 1,
+                      fontFamily: 'Montserrat-Light',
+                    }}>
+                    Order History
+                  </Text>
+                  <Entypo name="chevron-thin-right" size={15} color="black" />
+                </View>
+              </TouchableOpacity>
+            </>
+          )} */}
+        {/* <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        {vendorData?.profession &&
+          vendorData?.profession === 'Vendor & Seller' && (
+            <>
+              <TouchableOpacity
+                style={{marginVertical: 2}}
+                onPress={() =>
+                  navigation.navigate('My Products', {
+                    vendorId: vendorData._id,
+                  })
+                }>
+                <Text style={styles.profileLable}>
+                  <Feather name="box" size={14} color="#C026D3" /> My products
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: 'black',
+                      // letterSpacing: 1,
+                      fontFamily: 'Montserrat-Light',
+                    }}>
+                    View & Edit product listings
+                  </Text>
+                  <Entypo name="chevron-thin-right" size={15} color="black" />
+                </View>
+              </TouchableOpacity>
+              <View
+                style={{
+                  borderBottomColor: '#9d9d9d',
+                  borderBottomWidth: 1,
+                  marginVertical: 15,
+                }}></View>
+            </>
+          )} */}
+        {/* TouchableOpacity> */}
+        {vendorData?.profession &&
+          vendorData?.profession === 'Vendor & Seller' && (
+            <TouchableOpacity
+              style={{marginVertical: 2, marginTop: 10}}
+              onPress={() =>
+                navigation.navigate('My Products', {
+                  vendorId: vendorData._id,
+                })
+              }>
+              <Text style={styles.profileLable}>
+                <Feather name="box" size={20} color="#C026D3" /> My products
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    color: 'black',
+                    // letterSpacing: 1,
+                    fontFamily: 'Montserrat-Light',
+                  }}>
+                  View & Edit product listings
+                </Text>
+                <Entypo name="chevron-thin-right" size={15} color="black" />
+              </View>
+            </TouchableOpacity>
+          )}
+        <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        {vendorData?.profession &&
+          vendorData?.profession !== 'Vendor & Seller' && (
+            <>
+              <TouchableOpacity
+                style={{marginVertical: 2, marginTop: 10}}
+                onPress={() =>
+                  navigation.navigate('Service List', {
+                    vendorId: vendorData._id,
+                  })
+                }>
+                <Text style={styles.profileLable}>
+                  <Feather name="box" size={20} color="#C026D3" /> My Services
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: 'black',
+                      // letterSpacing: 1,
+                      fontFamily: 'Montserrat-Light',
+                    }}>
+                    View & Edit service listings
+                  </Text>
+                  <Entypo name="chevron-thin-right" size={15} color="black" />
+                </View>
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  borderBottomColor: '#9d9d9d',
+                  borderBottomWidth: 1,
+                  marginVertical: 15,
+                }}></View>
+            </>
+          )}
+        {/* <TouchableOpacity>
+          <View style={{marginVertical: 2}}>
+            <Text style={styles.profileLable}>
+              <MaterialCommunityIcons
+                name="shield-key-outline"
+                size={20}
+                color="#C026D3"
+              />{' '}
+              Security
+            </Text>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: 'black',
+                  // letterSpacing: 1,
+                  fontFamily: 'Montserrat-Light',
+                }}>
+                Change password
+              </Text>
+
+              <Entypo name="chevron-thin-right" size={15} color="black" />
+            </View>
+          </View>
+        </TouchableOpacity> */}
+        {/* <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        <View style={{marginVertical: 2}}>
+          <Text style={styles.profileLable}>
+            <MaterialCommunityIcons
+              name="cards-heart-outline"
+              size={14}
+              color="#C026D3"
+            />{' '}
+            Wishlist
+          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: 'black',
+                // letterSpacing: 1,
+                fontFamily: 'Montserrat-Light',
+              }}>
+              View & Remove wishlist
+            </Text>
+            <TouchableOpacity>
+              <Entypo name="chevron-thin-right" size={15} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View> */}
+        {/* <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        <View style={{marginVertical: 2}}>
+          <Text style={styles.profileLable}>
+            <MaterialCommunityIcons
+              name="file-document-outline"
+              size={14}
+              color="#C026D3"
+            />{' '}
+            Uploads
+          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: 'black',
+                // letterSpacing: 1,
+                fontFamily: 'Montserrat-Light',
+              }}>
+              Add & Edit documents
+            </Text>
+            <TouchableOpacity>
+              <Entypo name="chevron-thin-right" size={15} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View> */}
+        {/* <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View> */}
+        <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
+          <View style={{marginVertical: 2}}>
+            <Text style={styles.profileLable}>
+              <MaterialCommunityIcons
+                name="shield-check-outline"
+                size={20}
+                color="#C026D3"
+              />{' '}
+              Privacy policy
+            </Text>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: 'black',
+                  // letterSpacing: 1,
+                  fontFamily: 'Montserrat-Light',
+                }}>
+                Read privacy policy
+              </Text>
+              <Entypo name="chevron-thin-right" size={15} color="black" />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        <TouchableOpacity onPress={() => navigation.navigate('TermsCondition')}>
+          <View style={{marginVertical: 2}}>
+            <Text style={styles.profileLable}>
+              <MaterialCommunityIcons
+                name="note-text-outline"
+                size={20}
+                color="#C026D3"
+              />{' '}
+              Terms & Conditions
+            </Text>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: 'black',
+                  // letterSpacing: 1,
+                  fontFamily: 'Montserrat-Light',
+                }}>
+                Read terms & conditions
+              </Text>
+              <Entypo name="chevron-thin-right" size={15} color="black" />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        <TouchableOpacity onPress={() => navigation.navigate('Aboutus')}>
+          <View style={{marginVertical: 2}}>
+            <Text style={styles.profileLable}>
+              <MaterialCommunityIcons
+                name="information-outline"
+                size={20}
+                color="#C026D3"
+              />{' '}
+              About us
+            </Text>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: 'black',
+                  // letterSpacing: 1,
+                  fontFamily: 'Montserrat-Light',
+                }}>
+                About us
+              </Text>
+
+              <Entypo name="chevron-thin-right" size={15} color="black" />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        <TouchableOpacity onPress={() => navigation.navigate('FAQ')}>
+          <View style={{marginVertical: 2}}>
+            <Text style={styles.profileLable}>
+              <MaterialCommunityIcons
+                name="message-outline"
+                size={20}
+                color="#C026D3"
+              />{' '}
+              FAQ
+            </Text>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: 'black',
+                  // letterSpacing: 1,
+                  fontFamily: 'Montserrat-Light',
+                }}>
+                Frequently asked questions
+              </Text>
+
+              <Entypo name="chevron-thin-right" size={20} color="black" />
+            </View>
+          </View>
+        </TouchableOpacity>
+        {/* <View
+          style={{
+            borderBottomColor: '#9d9d9d',
+            borderBottomWidth: 1,
+            marginVertical: 15,
+          }}></View>
+        <View style={{marginVertical: 2}}>
+          <Text style={styles.profileLable}>
+            <MaterialIcons name="settings-suggest" size={14} color="#C026D3" />{' '}
+            Settings
+          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: 'black',
+                // letterSpacing: 1,
+                fontFamily: 'Montserrat-Light',
+              }}>
+              About us, Feedback, Terms & Conditions
+            </Text>
+            <TouchableOpacity>
+              <Entypo name="chevron-thin-right" size={15} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View> */}
+        <Pressable
+          onPress={removeItemValue}
+          style={{
+            backgroundColor: '#c026d31f',
+            // backgroundColor: '#e1e3f9',
+            padding: 10,
+            marginVertical: 20,
+            // elevation: 1,
+          }}>
+          <Text style={styles.profileLable}>
+            {' '}
+            <Octicons name="sign-in" size={20} color="black" /> Logout
+          </Text>
+        </Pressable>
+        <View style={{marginTop: 20}}>
+          <Text
+            style={{
+              fontFamily: 'Montserrat-Medium',
+              color: '#bfbfbf',
+              fontSize: 13,
+              // letterSpacing: 1,
+              textAlign: 'center',
+            }}>
+            {profileData.footer_text}
+            {/* &copy;2023 All rights reserved. */}
+          </Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 15,
+          }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontFamily: 'Montserrat-SemiBold',
+              letterSpacing: 1,
+              color: '#bfbfbf',
+            }}>
+            {/* <MaterialCommunityIcons
+              name="drawing-box"
+              size={18}
+              color="#bfbfbf"
+            /> */}
+            NITHYAEVENT
+          </Text>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  profileLable: {
+    fontSize: 15,
+    color: 'black',
+    // letterSpacing: 1,
+    fontFamily: 'Montserrat-Medium',
+    marginBottom: 3,
+  },
+});
