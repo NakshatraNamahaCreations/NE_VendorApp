@@ -11,6 +11,7 @@ import Modal from 'react-native-modal';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {featuredProduct} from '../../data/global-data';
 import THEMECOLOR from '../../utilities/color';
+import { formatAmount } from '../../utilities/formatAmount';
 // import LottieView from 'lottie-react-native';
 
 export default function NewArrivals({filterOut}) {
@@ -256,7 +257,7 @@ export default function NewArrivals({filterOut}) {
                         color: '#363636',
                         letterSpacing: 1,
                       }}>
-                      ₹{item.product_price}
+                      ₹{formatAmount(item.product_price)}
                     </Text>
                     {/* <TouchableOpacity
                       style={{

@@ -26,6 +26,7 @@ import {
   incrementQuantity,
   removeFromCart,
 } from '../../state_management/cartSlice';
+import { formatAmount } from '../../utilities/formatAmount';
 import {useDispatch, useSelector} from 'react-redux';
 
 function ShopDetails({route}) {
@@ -269,7 +270,7 @@ function ShopDetails({route}) {
                           color: 'black',
                           fontFamily: 'Montserrat-SemiBold',
                         }}>
-                        ₹ {ele.product_price}
+                        ₹{formatAmount(ele.product_price)}
                       </Text>
                       {/* <TouchableOpacity
                       style={{

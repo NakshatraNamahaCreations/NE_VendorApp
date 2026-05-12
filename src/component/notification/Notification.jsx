@@ -6,6 +6,7 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
+  DeviceEventEmitter,
 } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -58,6 +59,16 @@ export default function Notification() {
 
   const handleNotificationClick = notification => {
     console.log('notification type', notification);
+    if (notification.status === 'unread') {
+      setNotifications(prev =>
+        prev.map(n =>
+          n._id === notification._id ? {...n, status: 'read'} : n,
+        ),
+      );
+      DeviceEventEmitter.emit('notifications:read', {
+        notificationId: notification._id,
+      });
+    }
     switch (notification.notification_type) {
       case 'product_approval':
         navigation.navigate('My Products', {
@@ -108,9 +119,9 @@ export default function Notification() {
         throw new Error('Failed to mark notification as read');
       }
 
-      const data = await response.json();
-      fetchNotifications();
-      // console.log('Notification updated:', data);
+      await response.json();
+      // Re-emit so the Header re-fetches from the now-updated server state.
+      DeviceEventEmitter.emit('notifications:read', {notificationId});
     } catch (error) {
       console.error('Error marking notification as read:', error);
     }

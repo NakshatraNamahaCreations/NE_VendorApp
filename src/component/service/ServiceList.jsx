@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,10 +11,11 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
-import { apiUrl } from '../../api-services/api-constants';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {apiUrl} from '../../api-services/api-constants';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import THEMECOLOR from '../../utilities/color';
 import useBackHandler from '../../utilities/useBackHandler';
+import { formatAmount } from '../../utilities/formatAmount';
 
 export default function MyProducts() {
   const route = useRoute();
@@ -77,7 +78,7 @@ export default function MyProducts() {
 
   const filterServiceStatus = filterData();
 
-  const renderServiceItem = ({ item, index }) => (
+  const renderServiceItem = ({item, index}) => (
     <TouchableOpacity
       style={{
         flexDirection: 'row',
@@ -87,16 +88,15 @@ export default function MyProducts() {
         borderRadius: 10,
         padding: 8,
       }}
-      onPress={() => navigation.navigate('ServiceDetails', { item: item })}>
-      <View style={{ flex: 0.25 }}>
+      onPress={() => navigation.navigate('ServiceDetails', {item: item})}>
+      <View style={{flex: 0.25}}>
         <Image
-          source={
-            {
-              uri: item?.additional_images?.length > 0 ?
-                item.additional_images[0]
-                : "https://t3.ftcdn.net/jpg/05/79/68/24/360_F_579682465_CBq4AWAFmFT1otwioF5X327rCjkVICyH.jpg"
-            }
-          }
+          source={{
+            uri:
+              item?.additional_images?.length > 0
+                ? item.additional_images[0]
+                : 'https://t3.ftcdn.net/jpg/05/79/68/24/360_F_579682465_CBq4AWAFmFT1otwioF5X327rCjkVICyH.jpg',
+          }}
           style={{
             height: 80,
             resizeMode: 'cover',
@@ -105,7 +105,7 @@ export default function MyProducts() {
           }}
         />
       </View>
-      <View style={{ flex: 0.75 }}>
+      <View style={{flex: 0.75}}>
         <Text
           style={{
             fontSize: 14,
@@ -116,7 +116,7 @@ export default function MyProducts() {
           {item.service_name}
         </Text>
         <View
-          style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
+          style={{flexDirection: 'row', alignItems: 'center', marginBottom: 5}}>
           <Text
             style={{
               fontSize: 13,
@@ -124,7 +124,7 @@ export default function MyProducts() {
               color: 'black',
               fontFamily: 'Montserrat-SemiBold',
             }}>
-            ₹{item.price}
+            ₹{formatAmount(item.price)}/day
           </Text>
           {item.approval_status === 'Disapproved' && (
             <TouchableOpacity
@@ -159,8 +159,8 @@ export default function MyProducts() {
               item.approval_status === 'Disapproved'
                 ? '#e91e63'
                 : item.approval_status === 'Approved'
-                  ? 'green'
-                  : 'orange',
+                ? 'green'
+                : 'orange',
           }}>
           {item.approval_status}
         </Text>
@@ -182,11 +182,9 @@ export default function MyProducts() {
     );
   }
 
-
   return (
-    <View style={{ padding: 10 }}>
-
-      <View style={{ marginVertical: 10 }}>
+    <View style={{padding: 10}}>
+      <View style={{marginVertical: 10}}>
         <TextInput
           style={{
             height: 45,
@@ -209,12 +207,12 @@ export default function MyProducts() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: 15 }}>
+        style={{marginBottom: 15}}>
         {sericeStatusList.map((status, index) => (
           <TouchableOpacity
             key={index}
             onPress={() => setServiceStatus(status)}
-            style={{ marginHorizontal: 10 }}>
+            style={{marginHorizontal: 10}}>
             <Text
               style={{
                 fontSize: 14,
@@ -237,7 +235,7 @@ export default function MyProducts() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        ListFooterComponent={<View style={{ marginBottom: 120 }} />}
+        ListFooterComponent={<View style={{marginBottom: 120}} />}
       />
     </View>
   );

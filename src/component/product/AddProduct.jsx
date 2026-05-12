@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 // import ToggleSwitch from 'toggle-switch-react-native';
-import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'react-native-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -600,41 +599,43 @@ export default function AddProduct({ ProductType, vendorData }) {
       </View>
       <View style={styles.rowSection}>
         <Text style={styles.productLable}>Category {asterisk()}</Text>
-        <View
+        <Dropdown
+          data={categories.map(item => ({ label: item.type, value: item.type }))}
+          labelField="label"
+          valueField="value"
+          placeholder="Select category"
+          value={selectedCategory}
+          onChange={item => setSelectedCategory(item.value)}
+          maxHeight={260}
           style={{
             borderWidth: 1,
             borderColor: '#d5d5d5',
             borderRadius: 10,
-          }}>
-          <Picker
-            selectedValue={selectedCategory}
-            style={{ color: 'black' }}
-            onValueChange={cteItem => setSelectedCategory(cteItem)}>
-            <Picker.Item
-              label="Select category"
-              value=""
-              style={{
-                color: deviceTheme === 'dark' ? 'white' : 'black',
-                fontSize: 13,
-                fontFamily: 'Montserrat-Regular',
-              }}
-            />
-            {categories.map((item, index) => (
-              <Picker.Item
-                key={index}
-                label={item.type}
-                value={item.type}
-                style={{
-                  color: 'black',
-                  fontSize: 13,
-                  fontFamily: 'Montserrat-Regular',
-                  color: deviceTheme === 'dark' ? 'white' : 'black',
-                  // letterSpacing: 1,
-                }}
-              />
-            ))}
-          </Picker>
-        </View>
+            marginBottom: 10,
+            paddingHorizontal: 15,
+            height: 48,
+            backgroundColor: 'white',
+          }}
+          placeholderStyle={{
+            color: '#757575',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Regular',
+          }}
+          selectedTextStyle={{
+            color: 'black',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Medium',
+          }}
+          itemTextStyle={{
+            color: 'black',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Regular',
+          }}
+          containerStyle={{
+            borderRadius: 10,
+            borderColor: '#d5d5d5',
+          }}
+        />
       </View>
       <View style={styles.rowSection}>
         <Text style={styles.productLable}>Product Name {asterisk()}</Text>

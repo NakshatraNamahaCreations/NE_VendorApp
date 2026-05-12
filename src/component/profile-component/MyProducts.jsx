@@ -15,6 +15,7 @@ import { apiUrl } from '../../api-services/api-constants';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import THEMECOLOR from '../../utilities/color';
 import useBackHandler from '../../utilities/useBackHandler';
+import { formatAmount } from '../../utilities/formatAmount';
 // import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 export default function MyProducts() {
@@ -130,7 +131,7 @@ export default function MyProducts() {
               color: 'black',
               fontFamily: 'Montserrat-SemiBold',
             }}>
-            ₹{item.product_price}/day
+            ₹{formatAmount(item.product_price)}/day
           </Text>
           {/* uncommand later */}
           {item.approval_status === 'Disapproved' && (

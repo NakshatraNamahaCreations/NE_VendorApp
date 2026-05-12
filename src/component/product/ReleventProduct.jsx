@@ -10,6 +10,7 @@ import {
 import React, {useState} from 'react';
 import THEMECOLOR from '../../utilities/color';
 import {apiUrl} from '../../api-services/api-constants';
+import { formatAmount } from '../../utilities/formatAmount';
 
 export default function ReleventProduct({relevantProducts}) {
   return (
@@ -103,7 +104,7 @@ export default function ReleventProduct({relevantProducts}) {
                       size={13}
                       color="black"
                     /> */}
-                    ₹ {items.product_price}
+                    ₹{formatAmount(items.product_price)}
                   </Text>
                 </View>
                 <View

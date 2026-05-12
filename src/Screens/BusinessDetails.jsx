@@ -175,7 +175,7 @@ export default function BusinessDetails() {
 
   const isValidGSTIN = gst => {
     const gstRegex =
-      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[1-9A-Z]{1}$/;
     return gstRegex.test(gst);
   };
 
@@ -184,9 +184,12 @@ export default function BusinessDetails() {
     //27AAACT2727Q1ZW
   };
 
+  const sanitizeBusinessName = val => val.replace(/\s+/g, '').slice(0, 50);
+
   const sanitizePAN = pan => {
     return pan.replace(/[^A-Z0-9]/g, '').slice(0, 10);
   };
+  const isValidPAN = pan => /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan);
 
   const sanitizeAadhaar = val => val.replace(/\D/g, '').slice(0, 12);
   const isValidAadhaar = num => /^[2-9][0-9]{11}$/.test(num);
@@ -196,6 +199,17 @@ export default function BusinessDetails() {
   const handleSubmit = async () => {
     if (!businessName) {
       Alert.alert('Warning', 'Business Name is required');
+      return;
+    }
+    if (businessName.length < 3 || businessName.length > 50) {
+      Alert.alert(
+        'Warning',
+        'Business Name must be between 3 and 50 characters',
+      );
+      return;
+    }
+    if (/\s/.test(businessName)) {
+      Alert.alert('Warning', 'Business Name cannot contain spaces');
       return;
     }
     if (!logoOrImageUri) {
@@ -226,12 +240,27 @@ export default function BusinessDetails() {
       Alert.alert('Warning', 'PAN back side image is required');
       return;
     }
+    if (!panNumber) {
+      Alert.alert('Warning', 'PAN Number is required');
+      return;
+    }
+    if (!isValidPAN(panNumber)) {
+      Alert.alert(
+        'Error',
+        'Please enter a valid PAN number (e.g. ABCDE1234F)',
+      );
+      return;
+    }
     if (!gstNumber) {
       Alert.alert('Warning', 'GST Number is required');
       return;
     }
     if (gstNumber && !isValidGSTIN(gstNumber)) {
       Alert.alert('Error', 'Please enter a valid GSTIN number');
+      return;
+    }
+    if (gstNumber && gstNumber.slice(-1) === '0') {
+      Alert.alert('Error', 'GST number last digit cannot be "0"');
       return;
     }
     setLoading(true);
@@ -273,6 +302,7 @@ export default function BusinessDetails() {
           name: panBackName || 'image.jpg',
         });
       }
+      formData.append('pan_number', panNumber);
 
       formData.append('experience_in_business', businessExperience);
       // formData.append('pricing', pricing);
@@ -360,7 +390,8 @@ export default function BusinessDetails() {
           placeholderTextColor="#757575"
           placeholder="Enter business name"
           value={businessName}
-          onChangeText={val => setBusinessName(val)}
+          maxLength={50}
+          onChangeText={val => setBusinessName(sanitizeBusinessName(val))}
           style={{
             borderWidth: 1,
             borderColor: '#d5d5d5',

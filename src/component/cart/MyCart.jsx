@@ -13,6 +13,7 @@ import {
 } from '../../state_management/cartSlice';
 import Octicons from 'react-native-vector-icons/Octicons';
 import {apiUrl} from '../../api-services/api-constants';
+import {formatAmount} from '../../utilities/formatAmount';
 
 export default function MyCart({vendorData}) {
   console.log('vendorData in cart', vendorData);
@@ -227,7 +228,7 @@ export default function MyCart({vendorData}) {
                           textDecorationLine: 'line-through',
                         }}>
                         {' '}
-                        ₹ {item.mrpPrice}{' '}
+                        ₹{formatAmount(item.mrpPrice)}{' '}
                       </Text>
                       <Text
                         style={{
@@ -240,7 +241,7 @@ export default function MyCart({vendorData}) {
                           marginLeft: 5,
                           // letterSpacing: 1,
                         }}>
-                        ₹ {item.totalPrice}
+                        ₹{formatAmount(item.totalPrice)}
                       </Text>
                     </View>
                   </View>

@@ -20,7 +20,7 @@ import * as ImagePicker from 'react-native-image-picker';
 import THEMECOLOR from '../../utilities/color';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Picker} from '@react-native-picker/picker';
+import {Dropdown} from 'react-native-element-dropdown';
 import {RadioButton} from 'react-native-paper';
 import AddOns from './AddOns';
 
@@ -396,42 +396,43 @@ export default function AddService({vendorData}) {
               )}
               <View style={{marginTop: 15}}>
                 <Text style={styles.productLable}>Select Service/Product</Text>
-                <View
+                <Dropdown
+                  data={findServiceCategory.map(item => ({label: item.sub_service_name, value: item.sub_service_name}))}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Select Category"
+                  value={selectedServiceCategory}
+                  onChange={item => setSelectedServiceCategory(item.value)}
+                  maxHeight={260}
                   style={{
                     borderWidth: 1,
                     borderColor: '#d5d5d5',
                     borderRadius: 10,
                     marginBottom: 10,
-                    paddingHorizontal: 5,
-                  }}>
-                  <Picker
-                    style={{color: 'black'}}
-                    selectedValue={selectedServiceCategory}
-                    onValueChange={cteItem =>
-                      setSelectedServiceCategory(cteItem)
-                    }>
-                    <Picker.Item
-                      label="Select Category"
-                      value=""
-                      style={{
-                        fontSize: 13,
-                        fontFamily: 'Montserrat-Medium',
-                        color: '#757575',
-                      }}
-                    />
-                    {findServiceCategory.map((item, index) => (
-                      <Picker.Item
-                        key={index}
-                        label={item.sub_service_name}
-                        value={item.sub_service_name}
-                        style={{
-                          fontSize: 13,
-                          fontFamily: 'Montserrat-Medium',
-                        }}
-                      />
-                    ))}
-                  </Picker>
-                </View>
+                    paddingHorizontal: 15,
+                    height: 48,
+                    backgroundColor: 'white',
+                  }}
+                  placeholderStyle={{
+                    color: '#757575',
+                    fontSize: 14,
+                    fontFamily: 'Montserrat-Regular',
+                  }}
+                  selectedTextStyle={{
+                    color: 'black',
+                    fontSize: 14,
+                    fontFamily: 'Montserrat-Medium',
+                  }}
+                  itemTextStyle={{
+                    color: 'black',
+                    fontSize: 14,
+                    fontFamily: 'Montserrat-Regular',
+                  }}
+                  containerStyle={{
+                    borderRadius: 10,
+                    borderColor: '#d5d5d5',
+                  }}
+                />
                 <View style={{}}>
                   <Text style={styles.productLable}>
                     Name of the Service/Product {asterisk()}
@@ -447,10 +448,12 @@ export default function AddService({vendorData}) {
                   />
                 </View>
                 <View style={{}}>
-                  <Text style={styles.productLable}>Price {asterisk()}</Text>
+                  <Text style={styles.productLable}>
+                    Price/day {asterisk()}
+                  </Text>
                   <TextInput
                     placeholderTextColor="#757575"
-                    placeholder="Enter Price"
+                    placeholder="Enter Price ₹"
                     value={serviceList.service_price}
                     keyboardType="numeric"
                     onChangeText={text => {

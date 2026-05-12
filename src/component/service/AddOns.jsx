@@ -9,14 +9,14 @@ import {
   TouchableOpacity,
   ToastAndroid,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import THEMECOLOR from '../../utilities/color';
-import { apiUrl } from '../../api-services/api-constants';
-import { useNavigation } from '@react-navigation/native';
+import {apiUrl} from '../../api-services/api-constants';
+import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
-import { Picker } from '@react-native-picker/picker';
+import {Dropdown} from 'react-native-element-dropdown';
 
-const AddOns = ({ vendorData }) => {
+const AddOns = ({vendorData}) => {
   const navigation = useNavigation();
   const [serviceName, setServiceName] = useState('');
   const [price, setPrice] = useState('');
@@ -25,7 +25,7 @@ const AddOns = ({ vendorData }) => {
   const [findServiceCategory, setFindServiceCategory] = useState([]);
   const [serviceCategoryList, setServiceCategoryList] = useState([]);
 
-  const asterisk = () => <Text style={{ color: '#f44336' }}>*</Text>;
+  const asterisk = () => <Text style={{color: '#f44336'}}>*</Text>;
 
   const fetchServiceCategoryData = async () => {
     try {
@@ -103,42 +103,48 @@ const AddOns = ({ vendorData }) => {
 
   return (
     <ScrollView>
-      <View style={{ marginTop: 20 }}>
+      <View style={{marginTop: 20}}>
         <Text style={styles.serviceLable}>Select Service {asterisk()}</Text>
-        <View
+        <Dropdown
+          data={findServiceCategory.map(item => ({
+            label: item.sub_service_name,
+            value: item.sub_service_name,
+          }))}
+          labelField="label"
+          valueField="value"
+          placeholder="Select Category"
+          value={selectedCategory}
+          onChange={item => setSelectedCategory(item.value)}
+          maxHeight={260}
           style={{
             borderWidth: 1,
             borderColor: '#d5d5d5',
             borderRadius: 10,
             marginBottom: 10,
-            paddingHorizontal: 5,
-          }}>
-          <Picker
-            style={{ color: 'black' }}
-            selectedValue={selectedCategory}
-            onValueChange={cteItem => setSelectedCategory(cteItem)}>
-            <Picker.Item
-              label="Select Category"
-              value=""
-              style={{
-                fontSize: 13,
-                fontFamily: 'Montserrat-Medium',
-                color: '#757575',
-              }}
-            />
-            {findServiceCategory.map((item, index) => (
-              <Picker.Item
-                key={index}
-                label={item.sub_service_name}
-                value={item.sub_service_name}
-                style={{
-                  fontSize: 13,
-                  fontFamily: 'Montserrat-Medium',
-                }}
-              />
-            ))}
-          </Picker>
-        </View>
+            paddingHorizontal: 15,
+            height: 48,
+            backgroundColor: 'white',
+          }}
+          placeholderStyle={{
+            color: '#757575',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Regular',
+          }}
+          selectedTextStyle={{
+            color: 'black',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Medium',
+          }}
+          itemTextStyle={{
+            color: 'black',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Regular',
+          }}
+          containerStyle={{
+            borderRadius: 10,
+            borderColor: '#d5d5d5',
+          }}
+        />
       </View>
       <View>
         <Text style={styles.serviceLable}>Service Name {asterisk()}</Text>
@@ -154,7 +160,7 @@ const AddOns = ({ vendorData }) => {
         <Text style={styles.serviceLable}>Price/Day {asterisk()}</Text>
         <TextInput
           placeholderTextColor="#757575"
-          placeholder="Enter Price per day"
+          placeholder="Enter Price/Day ₹"
           keyboardType="numeric"
           style={styles.inputBox}
           value={price}
@@ -164,7 +170,7 @@ const AddOns = ({ vendorData }) => {
           }}
         />
       </View>
-      <View style={{ marginVertical: 5, marginTop: 20, marginBottom: 40 }}>
+      <View style={{marginVertical: 5, marginTop: 20, marginBottom: 40}}>
         <TouchableOpacity
           onPress={isResponse ? null : addService}
           style={{

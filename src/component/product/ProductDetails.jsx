@@ -33,6 +33,7 @@ import {
 import { Badge } from 'react-native-paper';
 import { apiUrl } from '../../api-services/api-constants';
 import ProductTab from './ProductTab';
+import { formatAmount } from '../../utilities/formatAmount';
 
 const { width } = Dimensions.get('window');
 const MEDIA_HEIGHT = 300;
@@ -321,7 +322,7 @@ function ProductDetails({ route }) {
                   color: 'black',
                   fontFamily: 'Montserrat-Bold',
                 }}>
-                ₹ {product.product_price}/day
+                ₹{formatAmount(product.product_price)}/day
               </Text>
             </View>
             <View style={{ marginLeft: 5, marginTop: 7 }}>
@@ -333,7 +334,7 @@ function ProductDetails({ route }) {
                   textDecorationLine: 'line-through',
                 }}>
                 {' '}
-                ₹ {product.mrp_rate}
+                ₹{formatAmount(product.mrp_rate)}
               </Text>
             </View>
             <View style={{ marginLeft: 5, marginTop: 7 }}>

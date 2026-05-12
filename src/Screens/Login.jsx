@@ -41,6 +41,35 @@ export default function Login({navigation}) {
     });
   }, []);
 
+  const routeAfterLogin = async vendor => {
+    if (!vendor) {
+      Alert.alert('Error', 'Login failed: vendor data missing');
+      return;
+    }
+    await AsyncStorage.setItem('vendor', JSON.stringify(vendor));
+    const approved =
+      vendor?.is_approved === true && vendor?.review_status === 'Approved';
+    if (approved) {
+      navigation.navigate('BottomTab');
+      return;
+    }
+    if (vendor?.review_status === 'Disapproved') {
+      Alert.alert(
+        'Account Disapproved',
+        vendor?.reason_for_disapprove
+          ? `Reason: ${vendor.reason_for_disapprove}`
+          : 'Your account has been disapproved. Please contact support.',
+      );
+    } else {
+      ToastAndroid.showWithGravity(
+        'Your account is under review. You will be notified once approved.',
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER,
+      );
+    }
+    navigation.navigate('Waiting');
+  };
+
   // NOTE:  need to ensure that the GoogleSignin.configure() method is called before any sign-in attempts
   const GoogleLogin = async () => {
     console.log('function called');
@@ -109,10 +138,8 @@ export default function Login({navigation}) {
           {text: 'OK', onPress: () => handleGoogleLogin()},
           {text: 'Cancel', style: 'cancel'},
         ]);
-      } else if (data?.user) {
-        await AsyncStorage.setItem('user', JSON.stringify(data.user));
-        setUserDataFromContext(data.user);
-        navigation.navigate('Enable Location');
+      } else if (data?.vendor || data?.user) {
+        await routeAfterLogin(data.vendor || data.user);
       }
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -159,27 +186,15 @@ export default function Login({navigation}) {
       const response = await axios(config);
       if (response) {
         console.log(response);
-        // ToastAndroid.showWithGravity(
-        //   response.data.message || 'OTP sent to entered mobile number',
-        //   ToastAndroid.SHORT,
-        //   ToastAndroid.CENTER,
-        // );
         ToastAndroid.showWithGravity(
           response.data.message || 'Login Success',
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
-        await AsyncStorage.setItem(
-          'vendor',
-          JSON.stringify(response.data.vendor),
-        );
-        navigation.navigate('BottomTab');
+        await routeAfterLogin(response.data.vendor);
         setLoading(false);
         setMobileNumber('');
         console.log('login response:', response.data);
-        // navigation.navigate('Otp', {
-        //   userRes: response.data.user, //uncommand once sms resolved
-        // });
       }
     } catch (error) {
       setLoading(false);
@@ -213,16 +228,11 @@ export default function Login({navigation}) {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
-        await AsyncStorage.setItem(
-          'vendor',
-          JSON.stringify(response.data.vendor),
-        );
+        await routeAfterLogin(response.data.vendor);
         setLoading(false);
         setEmail('');
         setPassword('');
-        navigation.navigate('BottomTab');
         console.log('login response:', response.data);
-        // navigation.navigate('Enable Location');
       }
     } catch (error) {
       setLoading(false);
@@ -250,13 +260,8 @@ export default function Login({navigation}) {
       const response = await axios(config);
 
       if (response.status === 200) {
-        // Alert.alert('Success', response.data.message);
         console.log('AsyncStorage', response.data.vendor);
-        await AsyncStorage.setItem(
-          'vendor',
-          JSON.stringify(response.data.vendor),
-        );
-        navigation.navigate('BottomTab');
+        await routeAfterLogin(response.data.vendor);
       }
     } catch (error) {
       console.log('Unknown error:', error);
@@ -296,7 +301,7 @@ export default function Login({navigation}) {
         height: '100%',
         paddingTop: '10%',
       }}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={require('../../assets/Secure-login-bro.png')}
           style={{
@@ -480,23 +485,25 @@ export default function Login({navigation}) {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                // height: 50,
                 width: '100%',
                 borderColor: THEMECOLOR.mainColor,
                 borderWidth: 1,
                 marginVertical: 5,
               }}
-              onPress={() => setLoginType(1)}>
-              <FontAwesome name="mobile-phone" size={35} color="black" />
+              onPress={() => setLoginType(loginType === 0 ? 1 : 0)}>
+              {loginType === 0 ? (
+                <FontAwesome name="mobile-phone" size={35} color="black" />
+              ) : (
+                <Ionicons name="mail-outline" size={26} color="black" />
+              )}
               <Text
                 style={{
                   color: '#737373',
                   fontSize: 14,
                   fontFamily: 'Montserrat-SemiBold',
-                  marginLeft: 4,
+                  marginLeft: 8,
                 }}>
-                {' '}
-                Login with Phone
+                {loginType === 0 ? 'Login with Phone' : 'Login with Email'}
               </Text>
             </TouchableOpacity>
           </View>

@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiUrl } from '../../api-services/api-constants';
 import Feather from 'react-native-vector-icons/Feather';
 import THEMECOLOR from '../../utilities/color';
+import { formatAmount } from '../../utilities/formatAmount';
 
 const { width } = Dimensions.get('window');
 
@@ -292,7 +293,7 @@ export default function Home() {
                         textAlign: 'left',
                         fontFamily: 'Montserrat-Bold',
                       }}>
-                      ₹ {payoutAmount}
+                      ₹{formatAmount(payoutAmount)}
                     </Text>
                   </View>
                 </View>
@@ -344,7 +345,7 @@ export default function Home() {
                         textAlign: 'left',
                         fontFamily: 'Montserrat-Bold',
                       }}>
-                      ₹ {payoutAmount}
+                      ₹{formatAmount(payoutAmount)}
                     </Text>
                   </View>
                 </View>

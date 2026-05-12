@@ -25,6 +25,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Badge} from 'react-native-paper';
 import Modal from 'react-native-modal';
 import {apiUrl} from '../../api-services/api-constants';
+import { formatAmount } from '../../utilities/formatAmount';
 
 const Productfilter = ({route}) => {
   const filterType = route.params.filterType;
@@ -485,7 +486,7 @@ const Productfilter = ({route}) => {
                           color: 'black',
                           fontFamily: 'Montserrat-SemiBold',
                         }}>
-                        ₹ {ele.product_price}
+                        ₹{formatAmount(ele.product_price)}
                       </Text>
                     </View>
 

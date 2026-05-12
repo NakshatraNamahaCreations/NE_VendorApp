@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, DeviceEventEmitter} from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -33,6 +33,23 @@ export default function Header({vendor, refreshKey}) {
       fetchNotifications();
     }, []),
   );
+
+  useEffect(() => {
+    const sub = DeviceEventEmitter.addListener(
+      'notifications:read',
+      ({notificationId} = {}) => {
+        if (notificationId) {
+          setNotifications(prev =>
+            prev.map(n =>
+              n._id === notificationId ? {...n, status: 'read'} : n,
+            ),
+          );
+        }
+        fetchNotifications();
+      },
+    );
+    return () => sub.remove();
+  }, [vendorData?._id]);
 
   const notificationCount = useMemo(() => {
     return notifications.filter(item => item.status === 'unread').length;
@@ -104,17 +121,19 @@ export default function Header({vendor, refreshKey}) {
         </TouchableOpacity> */}
         {/* {vendorData?.profession === 'Vendor & Seller' ? ( */}
         <TouchableOpacity onPress={goToNotification}>
-          <View
-            style={{
-              position: 'absolute',
-              right: 0,
-              zIndex: 1,
-              top: 0,
-            }}>
-            <Badge theme={{colors: {primary: 'green'}}}>
-              {notificationCount}
-            </Badge>
-          </View>
+          {notificationCount > 0 && (
+            <View
+              style={{
+                position: 'absolute',
+                right: 0,
+                zIndex: 1,
+                top: 0,
+              }}>
+              <Badge theme={{colors: {primary: 'green'}}}>
+                {notificationCount}
+              </Badge>
+            </View>
+          )}
           <FontAwesome
             name="bell-o"
             color="black"

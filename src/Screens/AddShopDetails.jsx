@@ -76,8 +76,9 @@ export default function AddShopDetails() {
   const sanitizeGST = val => val.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 15);
   const sanitizePAN = val => val.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
   const sanitizeAadhaar = val => val.replace(/\D/g, '').slice(0, 12);
+  const sanitizeBusinessName = val => val.replace(/\s+/g, '').slice(0, 50);
   const isValidGSTIN = gst =>
-    /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(gst);
+    /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[1-9A-Z]{1}$/.test(gst);
   const isValidPAN = pan => /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan);
   const isValidAadhaar = num => /^[2-9][0-9]{11}$/.test(num);
 
@@ -188,6 +189,19 @@ export default function AddShopDetails() {
       setIsLoading(false);
       return;
     }
+    if (businessName.length < 3 || businessName.length > 50) {
+      Alert.alert(
+        'Warning',
+        'Business Name must be between 3 and 50 characters',
+      );
+      setIsLoading(false);
+      return;
+    }
+    if (/\s/.test(businessName)) {
+      Alert.alert('Warning', 'Business Name cannot contain spaces');
+      setIsLoading(false);
+      return;
+    }
     if (!logoOrImageUri) {
       Alert.alert('Warning', 'Business logo is required');
       setIsLoading(false);
@@ -220,6 +234,11 @@ export default function AddShopDetails() {
     }
     if (!isValidGSTIN(gstNumber)) {
       Alert.alert('Error', 'Please enter a valid 15-character GSTIN (e.g. 22AAAAA0000A1Z5)');
+      setIsLoading(false);
+      return;
+    }
+    if (gstNumber.slice(-1) === '0') {
+      Alert.alert('Error', 'GST number last digit cannot be "0"');
       setIsLoading(false);
       return;
     }
@@ -485,7 +504,8 @@ export default function AddShopDetails() {
           placeholderTextColor="#757575"
           placeholder="Enter business name"
           value={businessName}
-          onChangeText={val => setBusinessName(val)}
+          maxLength={50}
+          onChangeText={val => setBusinessName(sanitizeBusinessName(val))}
           style={{
             borderWidth: 1,
             borderColor: '#d5d5d5',

@@ -32,6 +32,7 @@ import Calculator from '../../utilities/Calculator';
 import useBackHandler from '../../utilities/useBackHandler';
 import OTPTextInput from 'react-native-otp-textinput';
 import THEMECOLOR from '../../utilities/color';
+import { formatAmount } from '../../utilities/formatAmount';
 
 const EventDetails = () => {
   useBackHandler();
@@ -161,10 +162,10 @@ const EventDetails = () => {
     const finalPayout = orderAmount - commissionAmount - taxAmount;
 
     return {
-      orderAmount: `₹${orderAmount?.toFixed(2)}`,
-      commissionAmount: `₹${commissionAmount?.toFixed(2)}`,
-      commissionTax: `₹${taxAmount?.toFixed(2)}`,
-      totalDeduction: `₹${finalPayout?.toFixed(2)}`,
+      orderAmount: `₹${formatAmount(orderAmount, 2)}`,
+      commissionAmount: `₹${formatAmount(commissionAmount, 2)}`,
+      commissionTax: `₹${formatAmount(taxAmount, 2)}`,
+      totalDeduction: `₹${formatAmount(finalPayout, 2)}`,
     };
   };
 

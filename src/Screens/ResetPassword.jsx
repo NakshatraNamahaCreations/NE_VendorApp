@@ -24,6 +24,25 @@ const ResetPassword = () => {
   const [cPassword, setCPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const passwordValidation = pwd => {
+    if (pwd.length < 8 || pwd.length > 16) {
+      return 'Password must be between 8 and 16 characters.';
+    }
+    if (!/[A-Z]/.test(pwd)) {
+      return 'Password must contain at least one uppercase letter.';
+    }
+    if (!/[a-z]/.test(pwd)) {
+      return 'Password must contain at least one lowercase letter.';
+    }
+    if (!/[0-9]/.test(pwd)) {
+      return 'Password must contain at least one number.';
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=\[\];'/\\`~]/.test(pwd)) {
+      return 'Password must contain at least one special character.';
+    }
+    return '';
+  };
+
   const resetPassword = async () => {
     setLoading(true);
 
@@ -34,6 +53,13 @@ const ResetPassword = () => {
         ToastAndroid.CENTER,
       );
       // alert('Password and Confirm Password are required');
+      setLoading(false);
+      return;
+    }
+
+    const pwdErr = passwordValidation(password);
+    if (pwdErr) {
+      ToastAndroid.showWithGravity(pwdErr, ToastAndroid.SHORT, ToastAndroid.CENTER);
       setLoading(false);
       return;
     }

@@ -18,6 +18,7 @@ import moment from 'moment';
 import {apiUrl} from '../../api-services/api-constants';
 import THEMECOLOR from '../../utilities/color';
 import Octicons from 'react-native-vector-icons/Octicons';
+import {formatAmount} from '../../utilities/formatAmount';
 
 export default function OrderHistory({vendorData}) {
   // console.log('vendorData in order history page>>>', vendorData);
@@ -249,7 +250,7 @@ export default function OrderHistory({vendorData}) {
                             marginVertical: 2,
                             fontFamily: 'Montserrat-Regular',
                           }}>
-                          ₹{item.totalPrice}
+                          ₹{formatAmount(item.totalPrice)}
                           <Text
                             style={{
                               fontSize: 14,

@@ -11,6 +11,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import {apiUrl} from '../../api-services/api-constants';
+import { formatAmount } from '../../utilities/formatAmount';
 // import AntDesign from 'react-native-vector-icons/AntDesign';
 // import {productList} from '../../data/global-data';
 
@@ -186,7 +187,7 @@ export default function Search() {
                         fontFamily: 'Montserrat-Regular',
                         // letterSpacing: 1,
                       }}>
-                      ₹ {item.product_price}
+                      ₹{formatAmount(item.product_price)}
                     </Text>
                   </View>
                 </View>

@@ -9,15 +9,15 @@ import {
   useColorScheme,
   Image,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 // import {Checkbox} from 'react-native-paper';
 import THEMECOLOR from '../utilities/color';
-import { Dropdown } from 'react-native-element-dropdown';
+import {Dropdown} from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { apiUrl } from '../api-services/api-constants';
-import { useNavigation } from '@react-navigation/native';
+import {apiUrl} from '../api-services/api-constants';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Register() {
   const navigation = useNavigation();
@@ -42,7 +42,7 @@ export default function Register() {
   const [passwordError, setPasswordError] = useState('');
   const colorScheme = useColorScheme();
 
-  const asterisk = () => <Text style={{ color: '#f44336' }}>*</Text>;
+  const asterisk = () => <Text style={{color: '#f44336'}}>*</Text>;
 
   function isValid_IFSC_Code(ifsc_Code) {
     let regex = new RegExp(/^[A-Z]{4}0[A-Z0-9]{6}$/);
@@ -63,29 +63,27 @@ export default function Register() {
     return val.replace(/[^a-zA-Z ]/g, '');
   };
   const numericFieldSanitized = val => {
-    return val.replace(/[^0-9]/g, '')
-  }
+    return val.replace(/[^0-9]/g, '');
+  };
 
   const passwordValidation = password => {
     const minLength = 8;
     const maxLength = 16;
-    const hasSpecialChar = /[^A-Za-z]/.test(password); // true if at least one non-letter (special character)
-    // const hasDigit = /\d/.test(password);              // true if contains any digit
-    // const onlyAlphaAndSpecial = /^[^0-9]+$/.test(password); // false if contains any digit
-
-    // Check length
     if (password.length < minLength || password.length > maxLength) {
       return 'Password must be between 8 and 16 characters.';
     }
-    // // Check for digits
-    // if (hasDigit) {
-    //   return 'Password must not contain numbers.';
-    // }
-    // Check for at least one special character
-    if (!hasSpecialChar) {
+    if (!/[A-Z]/.test(password)) {
+      return 'Password must contain at least one uppercase letter.';
+    }
+    if (!/[a-z]/.test(password)) {
+      return 'Password must contain at least one lowercase letter.';
+    }
+    if (!/[0-9]/.test(password)) {
+      return 'Password must contain at least one number.';
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=\[\];'/\\`~]/.test(password)) {
       return 'Password must contain at least one special character.';
     }
-    // All validations passed
     return '';
   };
 
@@ -173,12 +171,30 @@ export default function Register() {
       Alert.alert('Error', 'Bank Name is required');
       return;
     }
+    if (bankName.length < 3 || bankName.length > 50) {
+      Alert.alert('Error', 'Bank Name must be between 3 and 50 characters');
+      return;
+    }
     if (!accountHolderName) {
       Alert.alert('Error', 'Account Holder Name is required');
       return;
     }
+    if (accountHolderName.length < 3 || accountHolderName.length > 50) {
+      Alert.alert(
+        'Error',
+        'Account Holder Name must be between 3 and 50 characters',
+      );
+      return;
+    }
     if (!accountNumber) {
       Alert.alert('Error', 'Account Number is required');
+      return;
+    }
+    if (accountNumber.length < 5 || accountNumber.length > 20) {
+      Alert.alert(
+        'Error',
+        'Account Number must be between 5 and 20 digits',
+      );
       return;
     }
     if (!bankIFSC) {
@@ -187,6 +203,13 @@ export default function Register() {
     }
     if (!bankBranch) {
       Alert.alert('Error', 'Branch Name is Missing');
+      return;
+    }
+    if (bankBranch.length < 3 || bankBranch.length > 50) {
+      Alert.alert(
+        'Error',
+        'Bank Branch Name must be between 3 and 50 characters',
+      );
       return;
     }
     if (!isValid_IFSC_Code(bankIFSC)) {
@@ -201,7 +224,7 @@ export default function Register() {
         url: apiUrl.VENDOR_REGISTER,
         method: 'post',
         baseURL: apiUrl.BASEURL,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         data: {
           vendor_name: name,
           mobile_number: mobileNumber,
@@ -309,8 +332,8 @@ export default function Register() {
   // };
 
   return (
-    <View style={{ padding: 15, backgroundColor: 'white', height: '100%' }}>
-      <ScrollView>
+    <View style={{padding: 15, backgroundColor: 'white', height: '100%'}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <Image
             source={require('../../assets/nithyaevent-round-2.jpeg')}
@@ -578,8 +601,15 @@ export default function Register() {
             }}
           />
           {passwordError ? (
-            <Text style={{ color: 'red', fontSize: 11, marginBottom: 10, fontFamily: 'Montserrat-Medium', }}>
-              {passwordError}</Text>
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 11,
+                marginBottom: 10,
+                fontFamily: 'Montserrat-Medium',
+              }}>
+              {passwordError}
+            </Text>
           ) : null}
           <Text
             style={{
@@ -605,6 +635,7 @@ export default function Register() {
             placeholderTextColor="#757575"
             placeholder="Bank Name"
             value={bankName}
+            maxLength={50}
             onChangeText={val => setBankName(textFieldSanitized(val))}
             style={{
               borderWidth: 1,
@@ -631,6 +662,7 @@ export default function Register() {
             placeholderTextColor="#757575"
             placeholder="Bank Account Holder Name"
             value={accountHolderName}
+            maxLength={50}
             onChangeText={val => setAccountHolderName(textFieldSanitized(val))}
             style={{
               borderWidth: 1,
@@ -658,6 +690,7 @@ export default function Register() {
             placeholder="Bank Account Number"
             value={accountNumber}
             keyboardType="numeric"
+            maxLength={20}
             onChangeText={val => {
               const sanitized = val.replace(/[^0-9]/g, '');
               setAccountNumber(sanitized);
@@ -720,6 +753,7 @@ export default function Register() {
             placeholderTextColor="#757575"
             placeholder="Bank Branch"
             value={bankBranch}
+            maxLength={50}
             onChangeText={val => setBankBranch(textFieldSanitized(val))}
             style={{
               borderWidth: 1,

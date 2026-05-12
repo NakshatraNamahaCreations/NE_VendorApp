@@ -16,6 +16,7 @@ import axios from 'axios';
 import {clearCart} from '../../state_management/cartSlice';
 import {apiUrl} from '../../api-services/api-constants';
 import moment from 'moment';
+import {formatAmount} from '../../utilities/formatAmount';
 
 export default function OrderConfirmation({route}) {
   const userAddress = route.params.address;
@@ -291,7 +292,7 @@ export default function OrderConfirmation({route}) {
                       size={14}
                       color="black"
                     /> */}
-                    ₹ {item.totalPrice}
+                    ₹{formatAmount(item.totalPrice)}
                   </Text>
                   <Text
                     style={{
@@ -395,7 +396,7 @@ export default function OrderConfirmation({route}) {
                     size={14}
                     color="black"
                   /> */}
-                  ₹ {total.toFixed(2)}{' '}
+                  ₹{formatAmount(total, 2)}{' '}
                 </Text>
               </View>
             </View>

@@ -13,6 +13,7 @@ import {useSelector} from 'react-redux';
 //   removeFromCart,
 // } from '../../state_management/cartSlice';
 import {apiUrl} from '../../api-services/api-constants';
+import { formatAmount } from '../../utilities/formatAmount';
 // import axios from 'axios';
 
 function PopularItems({allProducts}) {
@@ -191,7 +192,7 @@ function PopularItems({allProducts}) {
                       color: 'black',
                       fontFamily: 'Montserrat-SemiBold',
                     }}>
-                    ₹ {item.product_price}
+                    ₹{formatAmount(item.product_price)}
                   </Text>
                 </View>
               </View>

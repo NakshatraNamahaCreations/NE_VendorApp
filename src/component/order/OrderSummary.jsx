@@ -17,6 +17,7 @@ import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
+import {formatAmount} from '../../utilities/formatAmount';
 
 export default function OrderSummary({route}) {
   const navigation = useNavigation();
@@ -242,7 +243,7 @@ export default function OrderSummary({route}) {
                   fontFamily: 'Montserrat-SemiBold',
                 }}>
                 {' '}
-                ₹ {product.totalPrice}
+                ₹{formatAmount(product.totalPrice)}
               </Text>
             </View>
           </View>
@@ -394,7 +395,7 @@ export default function OrderSummary({route}) {
                     size={14}
                     color="black"
                   /> */}
-                  ₹ {product.totalPrice}
+                  ₹{formatAmount(product.totalPrice)}
                 </Text>
               </View>
             </View>
@@ -429,7 +430,7 @@ export default function OrderSummary({route}) {
                     size={14}
                     color="black"
                   /> */}
-                  ₹ {taxes.cgst.toFixed(2)}
+                  ₹{formatAmount(taxes.cgst, 2)}
                 </Text>
               </View>
             </View>
@@ -463,7 +464,7 @@ export default function OrderSummary({route}) {
                     size={14}
                     color="black"
                   /> */}
-                  ₹ {taxes.sgst.toFixed(2)}
+                  ₹{formatAmount(taxes.sgst, 2)}
                 </Text>
               </View>
             </View>
@@ -498,7 +499,7 @@ export default function OrderSummary({route}) {
                     size={14}
                     color="black"
                   /> */}
-                  ₹ {finalAmountWithIncludingTax.toFixed(2)}{' '}
+                  ₹{formatAmount(finalAmountWithIncludingTax, 2)}{' '}
                 </Text>
               </View>
             </View>
@@ -666,7 +667,7 @@ export default function OrderSummary({route}) {
                   fontFamily: 'Montserrat-SemiBold',
                   marginTop: 2,
                 }}>
-                ₹{item.product_price}
+                ₹{formatAmount(item.product_price)}
               </Text>
             </TouchableOpacity>
           ))}

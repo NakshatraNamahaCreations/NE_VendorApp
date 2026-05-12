@@ -13,6 +13,7 @@ import {apiUrl} from '../../api-services/api-constants';
 import axios from 'axios';
 import {useRoute} from '@react-navigation/native';
 import THEMECOLOR from '../../utilities/color';
+import {formatAmount} from '../../utilities/formatAmount';
 
 export default function PayoutHistory() {
   useBackHandler();
@@ -128,7 +129,7 @@ export default function PayoutHistory() {
                     color: 'black',
                     fontFamily: 'Montserrat-Bold',
                   }}>
-                  ₹ {payoutAmount}
+                  ₹{formatAmount(payoutAmount)}
                 </Text>
               </View>
               <View
@@ -153,8 +154,8 @@ export default function PayoutHistory() {
                     color: 'black',
                     fontFamily: 'Montserrat-SemiBold',
                   }}>
-                  <Ionicons name="checkmark" color="#0d6efd" size={15} /> ₹{' '}
-                  {initiatedAmount}
+                  <Ionicons name="checkmark" color="#0d6efd" size={15} /> ₹
+                  {formatAmount(initiatedAmount)}
                 </Text>
                 <Text
                   style={{
@@ -171,8 +172,8 @@ export default function PayoutHistory() {
                     color: 'black',
                     fontFamily: 'Montserrat-SemiBold',
                   }}>
-                  <Ionicons name="checkmark-done" color="#198754" size={15} /> ₹{' '}
-                  {processedAmount}
+                  <Ionicons name="checkmark-done" color="#198754" size={15} /> ₹
+                  {formatAmount(processedAmount)}
                 </Text>
               </View>
             </View>
@@ -258,7 +259,7 @@ export default function PayoutHistory() {
                           color: 'black',
                           fontFamily: 'Montserrat-SemiBold',
                         }}>
-                        ₹ {amt.payout_amount}
+                        ₹{formatAmount(amt.payout_amount)}
                       </Text>
                       <Text
                         style={{

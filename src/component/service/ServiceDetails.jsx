@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import THEMECOLOR from '../../utilities/color';
 import useBackHandler from '../../utilities/useBackHandler';
+import { formatAmount } from '../../utilities/formatAmount';
 
 export default function ServiceDetails() {
   useBackHandler();
@@ -100,7 +101,7 @@ export default function ServiceDetails() {
               marginBottom: 10,
               fontSize: 13,
             }}>
-            ₹{service.price}
+            ₹{formatAmount(service.price)}/day
           </Text>
           <Text
             style={{

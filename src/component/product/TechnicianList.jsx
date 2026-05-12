@@ -20,9 +20,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Modal from 'react-native-modal';
 import { Button } from 'react-native-paper';
-import { Picker } from '@react-native-picker/picker';
+import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import useBackHandler from '../../utilities/useBackHandler';
+import { formatAmount } from '../../utilities/formatAmount';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -385,7 +386,7 @@ const TechnicianList = () => {
                 marginVertical: 2,
                 color: '#e91e63',
               }}>
-              ₹{item.price} / Day
+              ₹{formatAmount(item.price)} / Day
             </Text>
             <Text
               style={{
@@ -450,77 +451,83 @@ const TechnicianList = () => {
           </View>
           <View style={{ marginVertical: 5 }}>
             <Text style={styles.productLable}>Select Category </Text>
-            <View
+            <Dropdown
+              data={categories.map(item => ({ label: item.type, value: item.type }))}
+              labelField="label"
+              valueField="value"
+              placeholder="Select category"
+              value={selectedCategory}
+              onChange={item => setSelectedCategory(item.value)}
+              maxHeight={260}
               style={{
                 borderWidth: 1,
                 borderColor: '#d5d5d5',
                 borderRadius: 10,
-              }}>
-              <Picker
-                selectedValue={selectedCategory}
-                style={{ color: 'black' }}
-                onValueChange={cteItem => setSelectedCategory(cteItem)}>
-                <Picker.Item
-                  label="Select category"
-                  value=""
-                  style={{
-                    color: deviceTheme === 'dark' ? 'white' : 'black',
-                    fontSize: 13,
-                    fontFamily: 'Montserrat-Regular',
-                  }}
-                />
-                {categories.map((item, index) => (
-                  <Picker.Item
-                    key={index}
-                    label={item.type}
-                    value={item.type}
-                    style={{
-                      color: 'black',
-                      fontSize: 13,
-                      fontFamily: 'Montserrat-Regular',
-                      color: deviceTheme === 'dark' ? 'white' : 'black',
-                    }}
-                  />
-                ))}
-              </Picker>
-            </View>
+                marginBottom: 10,
+                paddingHorizontal: 15,
+                height: 48,
+                backgroundColor: 'white',
+              }}
+              placeholderStyle={{
+                color: '#757575',
+                fontSize: 14,
+                fontFamily: 'Montserrat-Regular',
+              }}
+              selectedTextStyle={{
+                color: 'black',
+                fontSize: 14,
+                fontFamily: 'Montserrat-Medium',
+              }}
+              itemTextStyle={{
+                color: 'black',
+                fontSize: 14,
+                fontFamily: 'Montserrat-Regular',
+              }}
+              containerStyle={{
+                borderRadius: 10,
+                borderColor: '#d5d5d5',
+              }}
+            />
           </View>
           <View style={{ marginVertical: 5 }}>
             <Text style={styles.productLable}>Select Technician </Text>
-            <View
+            <Dropdown
+              data={technicianList.map(ele => ({ label: ele.type, value: ele.type }))}
+              labelField="label"
+              valueField="value"
+              placeholder="Select category"
+              value={technicianType}
+              onChange={item => setTechnicianType(item.value)}
+              maxHeight={260}
               style={{
                 borderWidth: 1,
                 borderColor: '#d5d5d5',
                 borderRadius: 10,
-              }}>
-              <Picker
-                selectedValue={technicianType}
-                style={{ color: 'black' }}
-                onValueChange={cteItem => setTechnicianType(cteItem)}>
-                <Picker.Item
-                  label="Select category"
-                  value=""
-                  style={{
-                    color: deviceTheme === 'dark' ? 'white' : 'black',
-                    fontSize: 13,
-                    fontFamily: 'Montserrat-Regular',
-                  }}
-                />
-                {technicianList.map((ele, index) => (
-                  <Picker.Item
-                    key={index}
-                    label={ele.type}
-                    value={ele.type}
-                    style={{
-                      color: 'black',
-                      fontSize: 13,
-                      fontFamily: 'Montserrat-Regular',
-                      color: deviceTheme === 'dark' ? 'white' : 'black',
-                    }}
-                  />
-                ))}
-              </Picker>
-            </View>
+                marginBottom: 10,
+                paddingHorizontal: 15,
+                height: 48,
+                backgroundColor: 'white',
+              }}
+              placeholderStyle={{
+                color: '#757575',
+                fontSize: 14,
+                fontFamily: 'Montserrat-Regular',
+              }}
+              selectedTextStyle={{
+                color: 'black',
+                fontSize: 14,
+                fontFamily: 'Montserrat-Medium',
+              }}
+              itemTextStyle={{
+                color: 'black',
+                fontSize: 14,
+                fontFamily: 'Montserrat-Regular',
+              }}
+              containerStyle={{
+                borderRadius: 10,
+                borderColor: '#d5d5d5',
+              }}
+            />
           </View>
           <View>
             <Text style={styles.productLable}>Technician Name </Text>

@@ -17,6 +17,7 @@ import NumberToWord from './NumberToWord';
 import {useGenerateInvoice} from '../../hooks/useGenerateInvoice';
 import {PermissionsAndroid} from 'react-native';
 import RNFS from 'react-native-fs';
+import {formatAmount} from '../../utilities/formatAmount';
 
 export default function Invoice({route}) {
   const {order, vendorData} = route.params;
@@ -420,7 +421,7 @@ export default function Invoice({route}) {
                       fontFamily: 'Montserrat-Medium',
                       textAlign: 'center',
                     }}>
-                    ₹{order.product_price}
+                    ₹{formatAmount(order.product_price)}
                   </Text>
                   <View style={{flex: 2}}>
                     <Text
@@ -429,7 +430,7 @@ export default function Invoice({route}) {
                         fontFamily: 'Montserrat-Medium',
                         textAlign: 'center',
                       }}>
-                      CGST (9%): ₹{taxes.cgst.toFixed(2)}
+                      CGST (9%): ₹{formatAmount(taxes.cgst, 2)}
                     </Text>
                     <Text
                       style={{
@@ -437,7 +438,7 @@ export default function Invoice({route}) {
                         fontFamily: 'Montserrat-Medium',
                         textAlign: 'center',
                       }}>
-                      SGST (9%): ₹{taxes.sgst.toFixed(2)}
+                      SGST (9%): ₹{formatAmount(taxes.sgst, 2)}
                     </Text>
                   </View>
                   <Text
@@ -447,7 +448,7 @@ export default function Invoice({route}) {
                       color: 'black',
                       fontFamily: 'Montserrat-Medium',
                     }}>
-                    ₹{finalAmountWithIncludingTax.toFixed(2)}
+                    ₹{formatAmount(finalAmountWithIncludingTax, 2)}
                   </Text>
                 </View>
                 <View
@@ -465,7 +466,7 @@ export default function Invoice({route}) {
                       color: 'black',
                       marginRight: 3,
                     }}>
-                    TOTAL: ₹{finalAmountWithIncludingTax.toFixed(2)}
+                    TOTAL: ₹{formatAmount(finalAmountWithIncludingTax, 2)}
                   </Text>
                   <Text
                     style={{

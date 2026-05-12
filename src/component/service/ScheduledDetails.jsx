@@ -29,6 +29,7 @@ import {shareTickets} from '../../utilities/pdfUtils';
 import {shareInvoice} from '../../utilities/GenerateInvoice';
 import Modal from 'react-native-modal';
 import Calculator from '../../utilities/Calculator';
+import {formatAmount} from '../../utilities/formatAmount';
 
 const ScheduledDetails = () => {
   const deviceWidth = Dimensions.get('window').width;
@@ -83,10 +84,10 @@ const ScheduledDetails = () => {
     //   grandTotal: `₹${totalDeduction.toFixed(2)}`,
     // });
     return {
-      orderAmount: `₹${orderAmount.toFixed(2)}`,
-      commissionAmount: `₹${commissionPercentage.toFixed(2)}`,
-      commissionTax: `₹${commissionTax.toFixed(2)}`,
-      totalDeduction: `₹${totalDeduction.toFixed(2)}`,
+      orderAmount: `₹${formatAmount(orderAmount, 2)}`,
+      commissionAmount: `₹${formatAmount(commissionPercentage, 2)}`,
+      commissionTax: `₹${formatAmount(commissionTax, 2)}`,
+      totalDeduction: `₹${formatAmount(totalDeduction, 2)}`,
     };
   };
 

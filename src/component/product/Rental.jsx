@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 // import ToggleSwitch from 'toggle-switch-react-native';
-import {Picker} from '@react-native-picker/picker';
+import {Dropdown} from 'react-native-element-dropdown';
 import * as ImagePicker from 'react-native-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
@@ -166,36 +166,43 @@ export default function Rental({deviceTheme}) {
       </View>
       <View style={{marginVertical: 5}}>
         <Text style={styles.productLable}>Select category</Text>
-        <View style={styles.pickerWrapper}>
-          <Picker
-            selectedValue={selectedCategory}
-            style={styles.picker}
-            onValueChange={itemValue => {
-              if (itemValue !== selectedCategory) {
-                setSelectedCategory(itemValue);
-              }
-            }}>
-            <Picker.Item
-              label="Select"
-              value=""
-              style={[
-                styles.pickerItemPlaceholder,
-                {color: deviceTheme === 'dark' ? 'white' : '#757575'},
-              ]}
-            />
-            {categories.map((item, index) => (
-              <Picker.Item
-                key={index}
-                label={item.type}
-                value={item.type}
-                style={[
-                  styles.pickerItem,
-                  {color: deviceTheme === 'dark' ? 'white' : 'black'},
-                ]}
-              />
-            ))}
-          </Picker>
-        </View>
+        <Dropdown
+          data={categories.map(item => ({label: item.type, value: item.type}))}
+          labelField="label"
+          valueField="value"
+          placeholder="Select"
+          value={selectedCategory}
+          onChange={item => setSelectedCategory(item.value)}
+          maxHeight={260}
+          style={{
+            borderWidth: 1,
+            borderColor: '#d5d5d5',
+            borderRadius: 10,
+            marginBottom: 10,
+            paddingHorizontal: 15,
+            height: 48,
+            backgroundColor: 'white',
+          }}
+          placeholderStyle={{
+            color: '#757575',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Regular',
+          }}
+          selectedTextStyle={{
+            color: 'black',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Medium',
+          }}
+          itemTextStyle={{
+            color: 'black',
+            fontSize: 14,
+            fontFamily: 'Montserrat-Regular',
+          }}
+          containerStyle={{
+            borderRadius: 10,
+            borderColor: '#d5d5d5',
+          }}
+        />
       </View>
       <View style={{marginVertical: 5}}>
         <Text style={styles.productLable}>Product name</Text>

@@ -121,7 +121,17 @@ export default function WaitingScreen({ navigation }) {
         <View style={styles.bottomBtnWrap}>
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: '#b6b6b6' }]}
-            onPress={() => navigation.goBack()}>
+            onPress={async () => {
+              try {
+                await AsyncStorage.clear();
+              } catch (e) {
+                console.log('AsyncStorage clear error:', e);
+              }
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+              });
+            }}>
             <Text style={styles.btnText}>Go Back</Text>
           </TouchableOpacity>
         </View>
